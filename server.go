@@ -10,23 +10,24 @@ import (
 )
 
 type Server struct {
-	Router         *httprouter.Router
-	ElasticService *service.Elastic
-	Port           string
+	Router   *httprouter.Router
+	Handlers *service.Handlers
+	Port     string
 }
 
-func NewServer() *Server {
+func NewServer(h *service.Handlers) (*Server, error) {
 	server := &Server{
-		ElasticService: service.NewElastic(),
-		Router:         httprouter.New(),
-		Port:           "8000",
+		Router:   httprouter.New(),
+		Handlers: h,
+		Port:     "8000",
 	}
 	server.routes()
-	return server
+	return server, nil
 }
 
 func (s Server) routes() {
 	s.Router.GET("/health", s.health)
+	s.Router.GET("/search/:id", s.search)
 }
 
 func (s Server) Run() {
@@ -35,5 +36,9 @@ func (s Server) Run() {
 }
 
 func (s Server) health(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	service.Health(w, r, params)
+	s.Handlers.Health(w, r, params)
+}
+
+func (s Server) search(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	s.Handlers.Search(w, r, params)
 }

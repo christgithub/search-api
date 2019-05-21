@@ -1,26 +1,40 @@
 package service
 
-import . "github.com/search-api/model"
+import (
+	"github.com/olivere/elastic"
+	. "github.com/search-api/model"
+)
 
 type Elasticer interface {
-	Search(sku int) *Product
-	Delete(sku int) bool
+	Search(sku int) (*Product, error)
+	Delete(sku int) (bool, error)
+	Add() (bool, error)
 }
 
 type Elastic struct {
-	Port string `json:"port"`
+	ElasticClient *elastic.Client
 }
 
-func NewElastic() *Elastic {
-	return &Elastic{
-		Port: "9200",
+func NewElastic() (*Elastic, error) {
+	clientElastic, err := elastic.NewClient()
+
+	if err != nil {
+		return nil, err
 	}
+
+	return &Elastic{
+		ElasticClient: clientElastic,
+	}, nil
 }
 
-func Search(sku int) *Product {
-	return nil
+func (e Elastic) Add() (bool, error) {
+	return false, nil
 }
 
-func Delete(sku int) bool {
-	return true
+func (e Elastic) Search(sku int) (*Product, error) {
+	return nil, nil
+}
+
+func (e Elastic) Delete(sku int) (bool, error) {
+	return false, nil
 }
