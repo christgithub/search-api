@@ -10,14 +10,16 @@ import (
 )
 
 type Server struct {
-	Router *httprouter.Router
-	Port   string
+	Router         *httprouter.Router
+	ElasticService *service.Elastic
+	Port           string
 }
 
 func NewServer() *Server {
 	server := &Server{
-		Router: httprouter.New(),
-		Port:   "8000",
+		ElasticService: service.NewElastic(),
+		Router:         httprouter.New(),
+		Port:           "8000",
 	}
 	server.routes()
 	return server
