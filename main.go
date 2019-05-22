@@ -9,7 +9,6 @@ var logger *logrus.Logger
 
 func init() {
 	logrus.SetFormatter(&logrus.JSONFormatter{})
-	logrus.SetReportCaller(true)
 	logger = logrus.New()
 }
 

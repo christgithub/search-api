@@ -1,6 +1,7 @@
 package: github.com/search-api
 import:
 - package: github.com/julienschmidt/httprouter
+- package: github.com/olivere/elastic/v7
 testImport:
 - package: github.com/onsi/ginkgo
 - package: github.com/onsi/gomega

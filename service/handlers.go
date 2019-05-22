@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/sirupsen/logrus"
 
@@ -12,7 +11,7 @@ import (
 )
 
 type Handlers struct {
-	Elastic Elastic
+	Elastic Elasticer
 }
 
 func (h Handlers) Health(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
@@ -21,14 +20,15 @@ func (h Handlers) Health(w http.ResponseWriter, _ *http.Request, _ httprouter.Pa
 
 func (h Handlers) Search(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
-	product_id := params.ByName("id")
-	id, err := strconv.Atoi(product_id)
+	//product_id := params.ByName("id")
+	//fmt.Printf("PRODUCT ID %v", product_id)
+	//id, err := strconv.Atoi(product_id)
+	//
+	//if err != nil {
+	//	logrus.Fatal(err)
+	//}
 
-	if err != nil {
-		logrus.Fatal(err)
-	}
-
-	product, err := h.Elastic.Search(id)
+	product, err := h.Elastic.Search(1)
 
 	if err != nil {
 		logrus.Fatal(err)
