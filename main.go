@@ -1,6 +1,8 @@
 package main
 
 import (
+	handlers2 "github.com/search-api/handlers"
+	"github.com/search-api/repository"
 	"github.com/search-api/service"
 	"github.com/sirupsen/logrus"
 )
@@ -13,19 +15,18 @@ func init() {
 }
 
 func main() {
-	elastic, err := service.NewElastic()
-
-	if err != nil {
-		logger.Fatal(err)
+	elastic := service.Elastic{
+		ElasticRepo: &repository.ElasticSearch{},
 	}
 
-	handlers := &service.Handlers{
-		*elastic,
+	handlers := &handlers2.SearchHandler{
+		Elastic: elastic,
 	}
 
 	server, err := NewServer(handlers)
 	if err != nil {
 		logger.Fatal(err)
 	}
+	server.Routes()
 	server.Run()
 }

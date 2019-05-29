@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/olivere/elastic"
 	. "github.com/search-api/model"
+	"github.com/search-api/repository"
 )
 
 type Elasticer interface {
@@ -12,19 +12,7 @@ type Elasticer interface {
 }
 
 type Elastic struct {
-	ElasticClient *elastic.Client
-}
-
-func NewElastic() (*Elastic, error) {
-	clientElastic, err := elastic.NewClient()
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &Elastic{
-		ElasticClient: clientElastic,
-	}, nil
+	ElasticRepo repository.ElasticSearcher
 }
 
 func (e Elastic) Add() (bool, error) {
@@ -32,6 +20,7 @@ func (e Elastic) Add() (bool, error) {
 }
 
 func (e Elastic) Search(sku int) (*Product, error) {
+	_, _ = e.ElasticRepo.SearchByID(sku)
 	return nil, nil
 }
 
