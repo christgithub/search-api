@@ -9,23 +9,23 @@ import (
 )
 
 type FakeElasticSearcher struct {
-	SearchByIDStub        func(sku int) (*GetResult, error)
+	SearchByIDStub        func(sku string) (*SearchResult, error)
 	searchByIDMutex       sync.RWMutex
 	searchByIDArgsForCall []struct {
-		sku int
+		sku string
 	}
 	searchByIDReturns struct {
-		result1 *GetResult
+		result1 *SearchResult
 		result2 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeElasticSearcher) SearchByID(sku int) (*GetResult, error) {
+func (fake *FakeElasticSearcher) SearchByID(sku string) (*SearchResult, error) {
 	fake.searchByIDMutex.Lock()
 	fake.searchByIDArgsForCall = append(fake.searchByIDArgsForCall, struct {
-		sku int
+		sku string
 	}{sku})
 	fake.recordInvocation("SearchByID", []interface{}{sku})
 	fake.searchByIDMutex.Unlock()
@@ -41,16 +41,16 @@ func (fake *FakeElasticSearcher) SearchByIDCallCount() int {
 	return len(fake.searchByIDArgsForCall)
 }
 
-func (fake *FakeElasticSearcher) SearchByIDArgsForCall(i int) int {
+func (fake *FakeElasticSearcher) SearchByIDArgsForCall(i int) string {
 	fake.searchByIDMutex.RLock()
 	defer fake.searchByIDMutex.RUnlock()
 	return fake.searchByIDArgsForCall[i].sku
 }
 
-func (fake *FakeElasticSearcher) SearchByIDReturns(result1 *GetResult, result2 error) {
+func (fake *FakeElasticSearcher) SearchByIDReturns(result1 *SearchResult, result2 error) {
 	fake.SearchByIDStub = nil
 	fake.searchByIDReturns = struct {
-		result1 *GetResult
+		result1 *SearchResult
 		result2 error
 	}{result1, result2}
 }
