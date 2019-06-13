@@ -4,8 +4,8 @@ package repositoryfakes
 import (
 	"sync"
 
-	. "github.com/olivere/elastic"
 	"github.com/search-api/repository"
+	. "gopkg.in/olivere/elastic.v5"
 )
 
 type FakeElasticSearcher struct {

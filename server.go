@@ -10,11 +10,11 @@ import (
 
 type Server struct {
 	Router        *mux.Router
-	SearchHandler *handlers.SearchHandler
+	SearchHandler *handlers.SearchHandlerBySku
 	Port          string
 }
 
-func NewServer(h *handlers.SearchHandler) (Server, error) {
+func NewServer(h *handlers.SearchHandlerBySku) (Server, error) {
 	server := Server{
 		Router:        mux.NewRouter(),
 		SearchHandler: h,
@@ -24,7 +24,8 @@ func NewServer(h *handlers.SearchHandler) (Server, error) {
 }
 
 func (s *Server) Routes() {
-	s.Router.Handle("/search/id/{id}", s.SearchHandler).Methods("GET")
+	s.Router.Handle("/search/sku/{sku}", s.SearchHandler).Methods("GET")
+	s.Router.Handle("/search/ean/{ean}", s.SearchHandler).Methods("GET")
 	s.Router.HandleFunc("/health", s.Health).Methods("GET")
 
 }

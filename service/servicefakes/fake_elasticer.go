@@ -9,10 +9,10 @@ import (
 )
 
 type FakeElasticer struct {
-	SearchStub        func(sku int) (*Product, error)
+	SearchStub        func(sku string) (*Product, error)
 	searchMutex       sync.RWMutex
 	searchArgsForCall []struct {
-		sku int
+		sku string
 	}
 	searchReturns struct {
 		result1 *Product
@@ -38,10 +38,10 @@ type FakeElasticer struct {
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeElasticer) Search(sku int) (*Product, error) {
+func (fake *FakeElasticer) Search(sku string) (*Product, error) {
 	fake.searchMutex.Lock()
 	fake.searchArgsForCall = append(fake.searchArgsForCall, struct {
-		sku int
+		sku string
 	}{sku})
 	fake.recordInvocation("Search", []interface{}{sku})
 	fake.searchMutex.Unlock()
@@ -57,7 +57,7 @@ func (fake *FakeElasticer) SearchCallCount() int {
 	return len(fake.searchArgsForCall)
 }
 
-func (fake *FakeElasticer) SearchArgsForCall(i int) int {
+func (fake *FakeElasticer) SearchArgsForCall(i int) string {
 	fake.searchMutex.RLock()
 	defer fake.searchMutex.RUnlock()
 	return fake.searchArgsForCall[i].sku

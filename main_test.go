@@ -26,7 +26,7 @@ var _ = Describe("Search Api", func() {
 
 	var server Server
 	var fakeElastic = &servicefakes.FakeElasticer{}
-	var h = &handlers.SearchHandler{
+	var h = &handlers.SearchHandlerBySku{
 		Elastic: fakeElastic,
 	}
 
@@ -51,29 +51,29 @@ var _ = Describe("Search Api", func() {
 		})
 	})
 
-	Context("when the search endpoint is called", func() {
+	Context("when the search by sku endpoint is called", func() {
 		It("returns a product", func() {
 			prd := &model.Product{
-				ID:          "1",
+				SKU:         "1",
 				Description: "Beans",
 				Price:       2.99,
 				Available:   1,
 				CreatedAt:   time.Date(2019, 05, 18, 12, 34, 15, 651387237, time.UTC),
+				Eans:        []string{"123", "234", "345"},
 			}
 
 			fakeElastic.SearchReturns(prd, nil)
 			w := httptest.NewRecorder()
 
 			id := "1"
-			endpoint := fmt.Sprintf("/search/id/%s", id)
+			endpoint := fmt.Sprintf("/search/sku/%s", id)
 			method := "GET"
 
 			req, _ := http.NewRequest(method, endpoint, nil)
-			req = mux.SetURLVars(req, map[string]string{"id": "1"})
+			req = mux.SetURLVars(req, map[string]string{"sku": "1"})
 
 			server.SearchHandler.ServeHTTP(w, req)
-
-			Expect(w.Body.String()).To(Equal(`{"id":"1","description":"Beans","price":2.99,"available":1,"created_at":"2019-05-18T12:34:15.651387237Z"}`))
+			Expect(w.Body.String()).To(Equal(`{"sku":"1","description":"Beans","price":2.99,"available":1,"created_at":"2019-05-18T12:34:15.651387237Z","eans":["123","234","345"]}`))
 			Expect(fakeElastic.SearchCallCount()).To(Equal(1))
 		})
 	})

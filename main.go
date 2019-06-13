@@ -1,7 +1,7 @@
 package main
 
 import (
-	handlers2 "github.com/search-api/handlers"
+	"github.com/search-api/handlers"
 	"github.com/search-api/repository"
 	"github.com/search-api/service"
 	"github.com/sirupsen/logrus"
@@ -19,7 +19,7 @@ func main() {
 		ElasticRepo: &repository.ElasticSearch{},
 	}
 
-	handlers := &handlers2.SearchHandler{
+	handlers := &handlers.SearchHandlerBySku{
 		Elastic: elastic,
 	}
 

@@ -3,8 +3,7 @@ package repository
 import (
 	"context"
 
-	. "github.com/olivere/elastic"
-	"gopkg.in/olivere/elastic.v5"
+	. "gopkg.in/olivere/elastic.v5"
 )
 
 type ElasticSearcher interface {
@@ -18,7 +17,23 @@ type ElasticSearch struct {
 func (e ElasticSearch) SearchByID(sku string) (*SearchResult, error) {
 
 	ctx := context.Background()
-	termQuery := elastic.NewTermQuery("id", sku)
+	termQuery := NewTermQuery("id", sku)
+	result, err := e.Client.Search().
+		Index("products").
+		Query(termQuery).
+		From(0).Size(1).
+		Do(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (e ElasticSearch) SearchByEan(ean string) (*SearchResult, error) {
+
+	ctx := context.Background()
+	termQuery := NewTermQuery("ean", ean)
 	result, err := e.Client.Search().
 		Index("products").
 		Query(termQuery).
